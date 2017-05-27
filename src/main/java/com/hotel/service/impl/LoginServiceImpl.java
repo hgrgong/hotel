@@ -17,12 +17,8 @@ public class LoginServiceImpl implements LoginService {
     private AdminMapper mapper;
 
     @Override
-    public Admin check(String name, String password) {
+    public Admin check(String name) {
         Admin admin = mapper.selectByName(name);
-        if (admin.getPassword().equals(password)) {
-            return admin;
-        } else {
-            return null;
-        }
+        return admin;
     }
 }

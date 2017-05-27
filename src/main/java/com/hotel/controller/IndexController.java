@@ -13,7 +13,7 @@ public class IndexController {
 
     @RequestMapping("/")
     private String showIndex() {
-        return "index";
+        return "login";
     }
 
     @RequestMapping("/{page}")
