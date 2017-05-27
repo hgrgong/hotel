@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -23,7 +25,7 @@ public class LoginController {
     private LoginService service;
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    private Map<String, Object> login(@RequestBody Map<String, Object> user) {
+    private Map<String, Object> login(@RequestBody Map<String, Object> user, HttpServletRequest request) {
         // 初始化Response
         Response response = reUtil.newResponseInstance();
         String resultStatus = response.RESULT_ERROR;
@@ -39,6 +41,8 @@ public class LoginController {
         } else {
             resultStatus = response.RESULT_SUCCESS;
         }
+        HttpSession session = request.getSession();
+        session.setAttribute("userName", name);
         response.setResponseResult(resultStatus);
         response.setResultMSG(msg);
         return response.generateInstance();

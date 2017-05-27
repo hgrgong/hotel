@@ -124,7 +124,7 @@
                             bv.updateStatus(field, 'INVALID', 'callback');
                         } else {
                             // 页面跳转
-                            window.location.href = "/hotel/success";
+                            window.location.href = "/hotel/main";
                         }
                     },
                     error: function(data) {
