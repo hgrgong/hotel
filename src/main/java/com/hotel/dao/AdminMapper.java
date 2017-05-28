@@ -9,4 +9,6 @@ public interface AdminMapper {
 
     // select admin by name
     Admin selectByName(String name);
+    // update admin by name
+    void update(Admin admin);
 }

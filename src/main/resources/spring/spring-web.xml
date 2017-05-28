@@ -22,6 +22,7 @@
     <mvc:resources location="/resources/css/" mapping="/resources/css/**"></mvc:resources>
     <mvc:resources location="/resources/images/" mapping="/resources/images/**"></mvc:resources>
     <mvc:resources location="/resources/fonts/" mapping="/resources/fonts/**"></mvc:resources>
+    <mvc:resources location="/resources/partOfPage/" mapping="/resources/partOfPage/**"></mvc:resources>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="UTF-8"></property>

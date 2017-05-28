@@ -7,6 +7,10 @@
         select
         aid id, name, password
         from admin
-        where name=#{name}
+        where name = #{name}
     </select>
+
+    <update id="update">
+        update admin set password = #{password} where aid = #{id}
+    </update>
 </mapper>

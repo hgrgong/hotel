@@ -11,7 +11,7 @@
         body{height:100%; background:url(${pageContext.request.contextPath}/resources/images/bg.jpg) no-repeat;
             background-size:100% 100%;}
         h3{font-family:"微软雅黑"; margin:0 0 25px; text-align:center;}
-        .login{margin:190px auto 0; padding:20px 20px 5px; width:460px; background-color:#fff;
+        .login{margin:190px auto 0; padding:20px 20px 5px; width:360px; background-color:#fff;
             background:rgba(255,255,255,0.6);}
     </style>
 </head>
@@ -23,7 +23,8 @@
     		  <div class="form-group">
     		    <label for="inputName" class="col-lg-3 control-label">UserName</label>
     		    <div class="col-lg-9">
-    		      <input type="text" class="form-control" id="inputName" placeholder="Name" name="inputName">
+    		      <input type="text" class="form-control" id="inputName" placeholder="Name" name="inputName"
+    		             value="Wong">
     		    </div>
     		  </div>
     		  <div class="form-group">
@@ -40,9 +41,12 @@
     		</form>
     	</div>
     </div>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrapValidator.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.1.1.min.js">
+    </script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js">
+    </script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrapValidator.min.js">
+    </script>
 
     <script>
 

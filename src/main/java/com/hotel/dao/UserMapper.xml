@@ -24,14 +24,14 @@
         select
             uid id, name, gender, password, mobile, email
         from user
-        where uid=#{id}
+        where uid='#{id}'
     </select>
 
     <select id="selectByName" resultType="com.hotel.entity.User">
         select
         uid id, name, gender, password, mobile, email
         from user
-        where name=#{name}
+        where name='#{name}'
     </select>
 
     <select id="selectCriteriaUserByName" resultType="com.hotel.entity.User">
@@ -57,19 +57,19 @@
     <update id="update">
         update user
         set
-            name = #{name},
-            gender = #{gender},
-            password = #{password},
-            mobile = #{mobile},
-            email = #{email}
-        where id = #{id}
+            name = '#{name}',
+            gender = '#{gender}',
+            password = '#{password}',
+            mobile = '#{mobile}',
+            email = '#{email}'
+        where id = '#{id}'
     </update>
 
     <delete id="deleteById">
-        delete from user where id = #{id}
+        delete from user where id = '#{id}'
     </delete>
 
     <delete id="deleteByName">
-        delete from user where name = #{name}
+        delete from user where name = '#{name}'
     </delete>
 </mapper>

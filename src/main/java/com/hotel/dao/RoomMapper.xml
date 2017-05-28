@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hotel.dao.RoomMapper">
+
+    <select id="selectAll" resultType="com.hotel.entity.Room">
+        select rid roomId, price, status, category from room
+    </select>
+
+    <select id="selectByCategory" resultType="com.hotel.entity.Room">
+        select rid roomId, price, status, category from room where category = '#{category}'
+    </select>
+
+    <select id="selectByStatus" resultType="com.hotel.entity.Room">
+        select rid roomId, price, status, category from room where category = '#{status}'
+    </select>
+
+    <insert id="insert">
+        insert into room(price, status, category) values (#{price}, #{status}, #{category})
+    </insert>
+
+    <update id="update">
+        update room set status = '#{status}' where rid = '#{roomId}'
+    </update>
+
+    <update id="updatePrice">
+        update room set price = '#{price}' where category = '#{category}'
+    </update>
+
+    <delete id="deleteById">
+        delete from room where rid = '#{roomId}'
+    </delete>
+</mapper>

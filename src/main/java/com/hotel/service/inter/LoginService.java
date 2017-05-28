@@ -7,5 +7,7 @@ import com.hotel.entity.Admin;
  */
 public interface LoginService {
 
-    Admin check(String name);
+    Admin getAdmin(String name);
+
+    void changePassword(Admin admin);
 }

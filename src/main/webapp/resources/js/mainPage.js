@@ -1,24 +1,14 @@
-$(function() {
-	submitPasswordModify();
-	menuClickAction();
-	welcomePageInit();
-	passwordModifyInit();
-	signOut();
-	homePage();
-});
-
 // 加载欢迎界面
 function welcomePageInit(){
-	$('#panel').load('pagecomponent/welcomePage.jsp');
+	$('#panel').load('resources/partOfPage/welcome.jsp');
 }
 
 // 跳回首页
 function homePage(){
 	$('.home').click(function(){
-		$('#panel').load('pagecomponent/welcomePage.jsp');
+		$('#panel').load('resources/partOfPage/welcome.jsp');
 	})
 }
-
 
 // 动作延时
 var delay = (function(){
@@ -43,19 +33,26 @@ function menuClickAction() {
 
 // 注销登陆
 function signOut() {
-	$("#signOut").click(function() {
-		$.ajax({
-			type : "GET",
-			url : "account/logout",
-			dataType : "json",
-			contentType : "application/json",
-			success:function(response){
-				window.location.reload(true);
-			},error:function(response){
-				
-			}
-		})
-	})
+    $('#signOut').click(function() {
+        $.ajax({
+            type: "GET",
+            url: "account/logout",
+            dataType: "json",
+            contentType: "application/json",
+            success: function(response) {
+                window.location.href = "/hotel";
+            },
+            error: function(response) {
+            }
+        })
+    })
+}
+
+// 加载密码修改页面
+function changePassword() {
+    $("#editInfo").click(function() {
+        $('#panel').load('resources/partOfPage/changePassword.jsp');
+    })
 }
 
 // 显示操作结果提示模态框
@@ -104,123 +101,4 @@ function handleAjaxError(responseStatus){
 		msg = '遇到未知的错误';
 		showMsg(type, msg, append);
 	};
-}
-
-// 初始密码修改
-function passwordModifyInit(){
-	bootstrapValidatorInit();
-
-	// 是否弹出密码修改模态框
-	isPopPasswordModal = $('#isFirstLogin').text();
-	if (isPopPasswordModal == 'true') {
-		$('#init_password_modify').modal('show');
-	}
-}
-
-// 输入校验初始化
-function bootstrapValidatorInit(){
-	$('#form').bootstrapValidator({
-		message:'This value is not valid',
-		feedbackIcons:{
-			valid:'glyphicon glyphicon-ok',
-			invalid:'glyphicon glyphicon-remove',
-			validating:'glyphicon glyphicon-refresh'
-		},
-		excluded: [':disabled'],
-		fields:{// 字段验证
-			oldPassword:{// 原密码
-				validators:{
-					notEmpty:{
-						message:'输入不能为空'
-					},
-					callback:{}
-				}
-			},
-			newPassword:{// 新密码
-				validators:{
-					notEmpty:{
-						message:'输入不能为空'
-					},
-					stringLength:{
-						min:6,
-						max:16,
-						message:'密码长度为6~16位'
-					},
-					callback:{}
-				}
-			},
-			newPassword_re:{// 重复新密码
-				validators:{
-					notEmpty:{
-						message:'输入不能为空'
-					},
-					identical:{
-						field:'newPassword',
-						message:'两次密码不一致'
-					}
-				}
-			}
-		}
-	})
-}
-
-// 密码加密模块
-function passwordEncrying(userID,password){
-	var str1 = $.md5(password);
-	//var str2 = $.md5(str1 + userID);
-	return str1;
-}
-
-// 密码修改提交
-function submitPasswordModify(){
-	$('#init_password_modify_submit').click(function(event) {
-		var userID = $('#userID').html();
-		var oldPassword = $('#oldPassword').val();
-		var newPassword = $('#newPassword').val();
-		var rePassword = $('#newPassword_re').val();
-
-		oldPassword = passwordEncrying(userID, oldPassword);
-		newPassword = passwordEncrying(userID, newPassword);
-		rePassword = passwordEncrying(userID, rePassword);
-		var data = {
-				"oldPassword" : oldPassword,
-				"newPassword" : newPassword,
-				"rePassword" : rePassword
-			}
-
-		// 将数据通过 AJAX 发送到后端
-		$.ajax({
-			type: "POST",
-			url:"account/passwordModify",
-			dataType:"json",
-			contentType:"application/json",
-			data:JSON.stringify(data),
-			success:function(response){
-				// 接收并处理后端返回的响应e'd'
-				if(response.result == "error"){
-					var errorMessage;
-					if(response.msg == "passwordError"){
-						errorMessage = "密码错误";
-						field = "oldPassword"
-					}else if(response.msg == "passwordUnmatched"){
-						errorMessage = "密码不一致";
-						field = "newPassword"
-					}
-
-					$('form').data('bootstrapValidator').updateMessage(field,'callback',errorMessage);
-					$('form').data('bootstrapValidator').updateStatus(field,'INVALID','callback');
-				}else{
-					// 否则更新成功，弹出模态框并清空表单
-					$('#init_password_modify').modal('hide');
-					$('#reset').trigger("click");
-					$('#form').bootstrapValidator("resetForm",true); 
-				}
-				
-			},
-			error:function(xhr, textStatus, errorThrown){
-				// handler error
-				handleAjaxError(xhr.status);
-			}
-		});
-	});
 }

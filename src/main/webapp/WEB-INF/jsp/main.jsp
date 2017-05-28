@@ -27,7 +27,8 @@
             <div class="container-fluid">
                 <!-- 导航栏标题 -->
                 <div class="navbar-header">
-                    <a href="javascript:void(0)" class="navbar-brand home">仓库管理系统</a>
+                    <a href="javascript:void(0)" class="navbar-brand home" style="padding-left: 60px;">
+                        仓库管理系统</a>
                 </div>
 
                 <!-- 导航栏下拉菜单；用户信息与注销登陆 -->
@@ -42,8 +43,8 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="#" id="editInfo">
-                                        <span class="glyphicon glyphicon-pencil"></span> &nbsp;&nbsp;修改个人信息
+                                    <a href="javascript:void(0)" id="editInfo">
+                                        <span class="glyphicon glyphicon-pencil"></span> &nbsp;&nbsp;修改密码
                                     </a>
                                 </li>
                                 <li>
@@ -76,20 +77,20 @@
                             </div>
                         </h4>
                     </div>
-                    <div id="collapse2" class="panel-collapse collapse collapseBody in">
+                    <div id="collapse2" class="panel-collapse collapse collapseBody show">
                         <div class="panel-body">
 							<ul class="list-group">
 								<li class="list-group-item">
 									<a href="javascript:void(0)" id="" class="menu_item"
-									   name="pagecomponent/roomManage.jsp">客房管理</a>
+									   name="resources/partOfPage/roomManage.jsp">房间管理</a>
 								</li>
 								<li class="list-group-item">
 									<a href="javascript:void(0)" id="" class="menu_item"
-									   name="pagecomponent/userManage.jsp">房客管理</a>
+									   name="resources/partOfPage/userManage.jsp">用户管理</a>
 								</li>
 								<li class="list-group-item">
 									<a href="javascript:void(0)" id="" class="menu_item"
-									   name="pagecomponent/orderManage.jsp">订单管理</a>
+									   name="resources/partOfPage/orderManage.jsp">订单管理</a>
 								</li>
 							</ul>
                         </div>
@@ -97,10 +98,11 @@
                 </div>
             </div>
         </div>
+        <!-- 面板区域 -->
+        <div id="panel" class="col-md-10 col-sm-9">
+        </div>
     </div>
 </div>
-
-
 
     <script type="text/javascript"
             src="${pageContext.request.contextPath}/resources/js/jquery-2.2.3.min.js"></script>
@@ -126,5 +128,15 @@
             src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath}/resources/js/bootstrap-datetimepicker.zh-CN.js"></script>
+
+    <script>
+        $(function(){
+            homePage();
+            welcomePageInit();
+            signOut();
+            changePassword();
+            menuClickAction();
+        })
+    </script>
 </body>
 </html>
