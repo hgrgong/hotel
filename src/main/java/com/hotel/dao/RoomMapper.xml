@@ -10,11 +10,11 @@
     </select>
 
     <select id="selectByCategory" resultType="com.hotel.entity.Room">
-        select rid roomId, price, status, category from room where category = '#{category}'
+        select rid roomId, price, status, category from room where category = #{category}
     </select>
 
     <select id="selectByStatus" resultType="com.hotel.entity.Room">
-        select rid roomId, price, status, category from room where category = '#{status}'
+        select rid roomId, price, status, category from room where status = #{status}
     </select>
 
     <insert id="insert">

@@ -28,7 +28,7 @@
                 <!-- 导航栏标题 -->
                 <div class="navbar-header">
                     <a href="javascript:void(0)" class="navbar-brand home" style="padding-left: 60px;">
-                        仓库管理系统</a>
+                        宾馆管理系统</a>
                 </div>
 
                 <!-- 导航栏下拉菜单；用户信息与注销登陆 -->
