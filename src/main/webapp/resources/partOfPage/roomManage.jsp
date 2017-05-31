@@ -237,7 +237,7 @@ pageEncoding="UTF-8"%>
 		<div class="row" style="margin-top: 25px">
 			<div class="col-md-5">
 				<button class="btn btn-sm btn-default" id="add_goods">
-					<span class="glyphicon glyphicon-plus"></span> <span>添加货物信息</span>
+					<span class="glyphicon glyphicon-plus"></span> <span>添加房间</span>
 				</button>
 			</div>
 			<div class="col-md-5"></div>

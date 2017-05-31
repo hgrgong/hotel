@@ -5,15 +5,15 @@
 <mapper namespace="com.hotel.dao.OrderMapper">
 
     <select id="selectAll" resultType="com.hotel.entity.Order">
-        select oid orderId, uid userId, rid roomId, days liveDays from order
+        select oid orderId, uid userId, rid roomId, days liveDays from `order`
     </select>
 
     <select id="selectByRoomId" resultType="com.hotel.entity.Order">
-        select oid orderId, uid userId, rid roomId, days liveDays from order where rid = '#{roomId}'
+        select oid orderId, uid userId, rid roomId, days liveDays from `order` where rid = #{roomId}
     </select>
 
     <select id="selectByUserId" resultType="com.hotel.entity.Order">
-        select oid orderId, uid userId, rid roomId, days liveDays from order where uid = '#{userId}'
+        select oid orderId, uid userId, rid roomId, days liveDays from `order` where uid = #{userId}
     </select>
 
     <delete id="delete">
