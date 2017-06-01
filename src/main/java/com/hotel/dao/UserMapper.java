@@ -12,7 +12,7 @@ public interface UserMapper {
     List<User> selectAll();
 
     // select the specified user by given id
-    User selectById(Integer id);
+    List<User> selectById(Integer id);
 
     // select by user by name
     User selectByName(String name);

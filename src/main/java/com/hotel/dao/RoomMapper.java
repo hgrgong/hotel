@@ -11,6 +11,9 @@ public interface RoomMapper {
     // select all the room that living in the hotel
     List<Room> selectAll();
 
+    // select all the room by id
+    Room selectById(Integer roomId);
+
     // select all the room by category
     List<Room> selectByCategory(String category);
 

@@ -12,6 +12,9 @@ public interface OrderMapper {
     // select all the order
     List<Order> selectAll();
 
+    // select all the orderId
+    Order selectById(Integer id);
+
     // select order by roomId
     List<Order> selectByRoomId(Integer roomId);
 
@@ -20,4 +23,7 @@ public interface OrderMapper {
 
     // delete order
     void delete(Integer orderId);
+
+    // update order info
+    void update(Order order);
 }

@@ -70,4 +70,15 @@ public class OrderServiceImpl implements OrderService {
         item.setTotal(total);
         return item;
     }
+
+    @Override
+    public Order selectById(Integer id) {
+        Order order = mapper.selectById(id);
+        return order;
+    }
+
+    @Override
+    public void update(Order order) {
+        mapper.update(order);
+    }
 }

@@ -21,10 +21,7 @@
     </select>
 
     <select id="selectById" resultType="com.hotel.entity.User">
-        select
-            uid id, name, gender, password, mobile, email
-        from user
-        where uid = #{id}
+        select uid id, `name`, gender, `password`, mobile, email from `user` where uid = #{id}
     </select>
 
     <select id="selectByName" resultType="com.hotel.entity.User">

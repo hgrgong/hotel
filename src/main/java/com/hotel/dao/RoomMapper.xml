@@ -9,6 +9,10 @@
         select rid roomId, price, status, category from room
     </select>
 
+    <select id="selectById" resultType="com.hotel.entity.Room">
+        select rid roomId, price, status, category from room where rid = #{roomId}
+    </select>
+
     <select id="selectByCategory" resultType="com.hotel.entity.Room">
         select rid roomId, price, status, category from room where category = #{category}
     </select>
@@ -22,7 +26,7 @@
     </insert>
 
     <update id="update">
-        update room set status = '#{status}' where rid = '#{roomId}'
+        update room set status = #{status} where rid = #{roomId}
     </update>
 
     <update id="updatePrice">

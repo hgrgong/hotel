@@ -70,4 +70,15 @@ public class RoomServiceImpl implements RoomService {
         item.setTotal(total);
         return item;
     }
+
+    @Override
+    public Room showRoomById(Integer roomId) {
+        Room room = mapper.selectById(roomId);
+        return room;
+    }
+
+    @Override
+    public void updateStatus(Room room) {
+        mapper.update(room);
+    }
 }

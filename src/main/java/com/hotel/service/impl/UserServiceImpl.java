@@ -1,5 +1,6 @@
 package com.hotel.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hotel.dao.UserMapper;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
         PageHelper.startPage(page, rows);
         // 执行查询
         List<User> users = mapper.selectCriteriaUserByName(name);
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + users.get(0));
         PageInfo<User> info = new PageInfo<>(users);
         // 获取分页信息
         List<User> list = info.getList();
@@ -59,9 +61,8 @@ public class UserServiceImpl implements UserService {
         // 设置分页
         PageHelper.startPage(page, rows);
         // 执行查询
-        List<User> users = new ArrayList<>();
-        User user = mapper.selectById(userId);
-        users.add(user);
+        List<User> users = mapper.selectById(userId);
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + users.get(0));
         PageInfo<User> info = new PageInfo<>(users);
         // 获取分页信息
         List<User> list = info.getList();

@@ -35,4 +35,11 @@ public class testPageHelper {
         System.out.println("PageTotal: " + pageInfo.getTotal());
         System.out.println("PageSize: " + pageInfo.getPageSize());
     }
+
+    @Test
+    public void anotherTest() {
+        String num = "123";
+        Integer nu = Integer.parseInt(num);
+        System.out.println(nu + 3);
+    }
 }

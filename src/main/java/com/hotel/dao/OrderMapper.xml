@@ -4,6 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hotel.dao.OrderMapper">
 
+    <select id="selectById" resultType="com.hotel.entity.Order">
+        select oid orderId, uid userId, rid roomId, days liveDays from `order` where oid = #{id}
+    </select>
+
     <select id="selectAll" resultType="com.hotel.entity.Order">
         select oid orderId, uid userId, rid roomId, days liveDays from `order`
     </select>
@@ -16,7 +20,11 @@
         select oid orderId, uid userId, rid roomId, days liveDays from `order` where uid = #{userId}
     </select>
 
+    <update id="update">
+        update `order` set rid = #{roomId}, days = #{liveDays} where oid = #{orderId}
+    </update>
+
     <delete id="delete">
-        delete from order where oid = '#{orderId}'
+        delete from `order` where oid = '#{orderId}'
     </delete>
 </mapper>
