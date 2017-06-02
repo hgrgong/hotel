@@ -81,4 +81,14 @@ public class OrderServiceImpl implements OrderService {
     public void update(Order order) {
         mapper.update(order);
     }
+
+    @Override
+    public void addOrder(Order order) {
+        mapper.addOrder(order);
+    }
+
+    @Override
+    public void deleteOrder(Integer orderId) {
+        mapper.delete(orderId);
+    }
 }

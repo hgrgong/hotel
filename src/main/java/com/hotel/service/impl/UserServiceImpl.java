@@ -73,4 +73,10 @@ public class UserServiceImpl implements UserService {
         item.setTotal(total);
         return item;
     }
+
+    @Override
+    public List<User> selectUserById(Integer id) {
+        List<User> users = mapper.selectById(id);
+        return users;
+    }
 }

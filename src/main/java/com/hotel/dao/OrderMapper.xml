@@ -24,7 +24,11 @@
         update `order` set rid = #{roomId}, days = #{liveDays} where oid = #{orderId}
     </update>
 
+    <insert id="addOrder">
+        insert into `order`(uid, rid, days) values(#{userId}, #{roomId}, #{liveDays})
+    </insert>
+
     <delete id="delete">
-        delete from `order` where oid = '#{orderId}'
+        delete from `order` where oid = #{orderId}
     </delete>
 </mapper>

@@ -26,4 +26,7 @@ public interface OrderMapper {
 
     // update order info
     void update(Order order);
+
+    // insert order
+    void addOrder(Order order);
 }

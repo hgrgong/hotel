@@ -11,8 +11,10 @@
 		searchAction();
 		goodsListInit();
         bootstrapValidatorInit();
+        bootstrapValidatorInit2();
 		editOrder();
-
+        addOrder();
+        deleteOrder();
 	})
 
 	// 下拉框选择动作
@@ -184,7 +186,7 @@
 							msg = "订单更新失败";
 						}
 						showMsg(type, msg, append);
-						alert(msg);
+						// alert(msg);
 						tableRefresh();
 					},
 					error : function(xhr, textStatus, errorThrow) {
@@ -196,21 +198,81 @@
 			});
 	}
 
+	// 添加货物信息
+	function addOrder() {
+		$('#add_room').click(function() {
+			$('#add_modal').modal("show");
+		});
+
+		$('#add_modal_submit').click(
+            function() {
+                $('#order_form_add').data('bootstrapValidator')
+						.validate();
+				if (!$('#order_form_add').data('bootstrapValidator')
+						.isValid()) {
+					return;
+				}
+                var data = {
+                    userID: $('#userId').val(),
+                    roomID: $('#roomId').val(),
+                    livingDays: $('#liveDays').val(),
+                }
+                // text
+                // alert(data.userID + data.roomID + data.livingDays);
+                // ajax
+                $.ajax({
+                    type : "POST",
+                    url : "order/addOrder",
+                    dataType : "json",
+                    contentType : "application/json",
+                    data : JSON.stringify(data),
+                    success : function(response) {
+                        $('#add_modal').modal("hide");
+                        var msg;
+                        var type;
+                        var append = '';
+                        if (response.result == "success") {
+                            type = "success";
+                            msg = "订单添加成功";
+                        } else if (response.result == "error") {
+                            type = "error";
+                            msg = "订单添加失败";
+                        }
+                        showMsg(type, msg, append);
+                        // alert(msg);
+                        tableRefresh();
+
+                        // reset
+                        $('#userId').val("");
+                        $('#roomId').val("");
+                        $('#liveDays').val("");
+                        $('#order_form_add').bootstrapValidator("resetForm", true);
+                    },
+                    error : function(xhr, textStatus, errorThrow) {
+                        $('#add_modal').modal("hide");
+                        // handler error
+                        handleAjaxError(xhr.status);
+                    }
+                });
+		    });
+	}
+
 
 	// 添加供应商模态框数据校验
 	function bootstrapValidatorInit() {
 		$("#order_form_edit").bootstrapValidator({
-			message: 'This value is not valid',
+			message: 'This is not valid',
 			feedbackIcons: {
 				valid: 'glyphicon glyphicon-ok',
 				invalid: 'glyphicon glyphicon-remove',
 				validating: 'glyphicon glyphicon-refresh'
 			},
+			excluded : [ ':disabled' ],
 			fields: {
 				roomId: {
 					validators: {
 						notEmpty: {
-							message: '房间号不能为空'
+							message: '房间编号不能为空'
 						}
 					}
 				},
@@ -224,6 +286,94 @@
 			}
 		})
 		buttonOnOrOff();
+	}
+
+	// 添加供应商模态框数据校验
+	function bootstrapValidatorInit2() {
+		$("#order_form_add").bootstrapValidator({
+			message: 'This is not valid',
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			excluded : [ ':disabled' ],
+			fields: {
+				userId: {
+					validators: {
+						notEmpty: {
+							message: '用户编号不能为空'
+						},
+                        regexp: {
+                            regexp: /^[0-9]+$/,
+                            message: '用户编号只能是数字，且大于0'
+                        }
+					}
+				},
+				roomId: {
+					validators: {
+						notEmpty: {
+							message: '房间编号不能为空'
+						},
+                        regexp: {
+                            regexp: /^[0-9]+$/,
+                            message: '房间编号只能是数字，且大于0'
+                        }
+					}
+				},
+				liveDays: {
+					validators: {
+						notEmpty: {
+							message: '居住天数不能为空'
+						},
+                        regexp: {
+                            regexp: /^[0-9]+$/,
+                            message: '居中天数只能是数字，且大于0'
+                        }
+					}
+				}
+			}
+		})
+	}
+
+	// 刪除货物信息
+	function deleteOrder(){
+		$('#delete_confirm').click(function(){
+			var data = {
+				"orderID" : selectID
+			}
+            // alert(data.orderID);
+			// ajax
+			$.ajax({
+				type : "GET",
+				url : "order/deleteOrder",
+				dataType : "json",
+				contentType : "application/json",
+				data : data,
+				success : function(response){
+					$('#deleteWarning_modal').modal("hide");
+					var type;
+					var msg;
+					var append = '';
+					if(response.result == "success"){
+						type = "success";
+						msg = "货物信息删除成功";
+					}else{
+						type = "error";
+						msg = "货物信息删除失败";
+					}
+					showMsg(type, msg, append);
+					// alert(msg);
+					tableRefresh();
+				},error : function(xhr, textStatus, errorThrow){
+					$('#deleteWarning_modal').modal("hide");
+					// handler error
+					handleAjaxError(xhr.status);
+				}
+			})
+
+			$('#deleteWarning_modal').modal('hide');
+		})
 	}
 
 </script>
@@ -258,6 +408,14 @@
 						</button>
 					</div>
 				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin-top: 25px">
+			<div class="col-md-5">
+				<button class="btn btn-sm btn-default" id="add_room">
+					<span class="glyphicon glyphicon-plus"></span> <span>添加订单</span>
+				</button>
 			</div>
 		</div>
 
@@ -323,6 +481,98 @@
 				</button>
 				<button class="btn btn-success" type="button" id="edit_modal_submit">
 					<span>确认更改</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 添加货物信息模态框 -->
+<div id="add_modal" class="modal fade" table-index="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true"
+	data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">添加订单</h4>
+			</div>
+			<div class="modal-body">
+				<!-- 模态框的内容 -->
+				<div class="row">
+					<div class="col-md-1 col-sm-1"></div>
+					<div class="col-md-8 col-sm-8">
+						<form class="form-horizontal" role="form" id="order_form_add"
+							style="margin-top: 25px">
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>用户编号：</span>
+								</label>
+								<div class="col-md-8 col-sm-8">
+									<input type="text" class="form-control" id="userId"
+										name="userId" placeholder="用户编号">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>房间编号：</span>
+								</label>
+								<div class="col-md-8 col-sm-8">
+									<input type="text" class="form-control" id="roomId"
+										name="roomId" placeholder="房间编号">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>居住天数：</span>
+								</label>
+								<div class="col-md-8 col-sm-8">
+									<input type="text" class="form-control" id="liveDays"
+										name="liveDays" placeholder="居住天数">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-1 col-sm-1"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" type="button" data-dismiss="modal">
+					<span>取消</span>
+				</button>
+				<button class="btn btn-success" type="button" id="add_modal_submit">
+					<span>提交</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 删除提示模态框 -->
+<div class="modal fade" id="deleteWarning_modal" table-index="-1"
+	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">警告</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-3 col-sm-3" style="text-align: center;">
+						<img src="resources/images/warning-icon.png" alt=""
+							style="width: 70px; height: 70px; margin-top: 20px;">
+					</div>
+					<div class="col-md-8 col-sm-8">
+						<h3>是否确认删除这条订单</h3>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" type="button" data-dismiss="modal">
+					<span>取消</span>
+				</button>
+				<button class="btn btn-danger" type="button" id="delete_confirm">
+					<span>确认删除</span>
 				</button>
 			</div>
 		</div>

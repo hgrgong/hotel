@@ -3,16 +3,15 @@ package com.hotel.controller;
 import com.hotel.entity.Order;
 import com.hotel.entity.QueryItem;
 import com.hotel.entity.Room;
+import com.hotel.entity.User;
 import com.hotel.service.inter.OrderService;
 import com.hotel.service.inter.RoomService;
+import com.hotel.service.inter.UserService;
 import com.hotel.util.Response;
 import com.hotel.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -29,6 +28,8 @@ public class OrderController {
     private ResponseUtil util;
     @Autowired
     private RoomService rService;
+    @Autowired
+    private UserService uService;
 
     @RequestMapping("/showList")
     @ResponseBody
@@ -88,6 +89,56 @@ public class OrderController {
         order.setRoomId(roomId);
         order.setLiveDays(livingDays);
         service.update(order);
+        return response.generateInstance();
+    }
+
+    @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
+    @ResponseBody
+    private Map<String, Object> addOrder(@RequestBody Map<String, Object> data) {
+        // 获取 response 对象
+        Response response = util.newResponseInstance();
+        // 获取 data 中的数据
+        Integer userID = Integer.parseInt((String) data.get("userID"));
+//        System.out.println(userID);
+        Integer roomID = Integer.parseInt((String) data.get("roomID"));
+//        System.out.println(roomID);
+        Integer livingDays = Integer.parseInt((String) data.get("livingDays"));
+//        System.out.println(livingDays);
+        // 判断用户是否存在
+        QueryItem item = uService.selectUserByUserId(1, 10, userID);
+        System.out.println(item.getTotal());
+        if (item.getTotal() <= 0 || rService.showRoomById(roomID).getStatus() == 1) {
+            response.setResponseResult(Response.RESULT_ERROR);
+        } else {
+            response.setResponseResult(Response.RESULT_SUCCESS);
+            // order 插入记录
+            Order order = new Order();
+            order.setUserId(userID);
+            order.setRoomId(roomID);
+            order.setLiveDays(livingDays);
+            service.addOrder(order);
+            // 跟新 room 表状态
+            Room room = rService.showRoomById(roomID);
+            room.setStatus(1);
+            rService.updateStatus(room);
+        }
+        return response.generateInstance();
+    }
+
+    @RequestMapping(value = "/deleteOrder", method = RequestMethod.GET)
+    @ResponseBody
+    private Map<String, Object> addOrder(@RequestParam("orderID") Integer orderID) {
+        // 获取 response 对象
+        Response response = util.newResponseInstance();
+        // 跟新房间状态
+        Order order = service.selectById(orderID);
+        Integer roomId = order.getRoomId();
+        Room room = rService.showRoomById(roomId);
+        room.setStatus(0);
+        rService.updateStatus(room);
+        // 删除订单
+        service.deleteOrder(orderID);
+        response.setResponseResult(Response.RESULT_SUCCESS);
         return response.generateInstance();
     }
 }

@@ -104,6 +104,55 @@
     </div>
 </div>
 
+<!-- 提示消息模态框 -->
+<div class="modal fade" id="global_info_modal" table-index="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"
+                    aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4"></div>
+                    <div class="col-md-4 col-sm-4">
+                        <div id="info_success" class=" hide" style="text-align: center;">
+                            <img src="resources/images/success-icon.png" alt=""
+                                style="width: 100px; height: 100px;">
+                        </div>
+                        <div id="info_error" style="text-align: center;">
+                            <img src="resources/images/error-icon.png" alt=""
+                                style="width: 100px; height: 100px;">
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4"></div>
+                </div>
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6" style="text-align: center;">
+                        <h4 id="info_summary"></h4>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <dic class="row" style="margin-top: 10px">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6" style="text-align: center;">
+                        <p id='info_content'></p>
+                    </div>
+                    <div class="col-md-3"></div>
+                </dic>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">
+                    <span>&nbsp;&nbsp;&nbsp;关闭&nbsp;&nbsp;&nbsp;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script type="text/javascript"
             src="${pageContext.request.contextPath}/resources/js/jquery-2.2.3.min.js"></script>
     <script type="text/javascript"
