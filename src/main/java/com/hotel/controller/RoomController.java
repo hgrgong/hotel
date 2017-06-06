@@ -1,11 +1,13 @@
 package com.hotel.controller;
 
 import com.hotel.entity.QueryItem;
+import com.hotel.entity.Room;
 import com.hotel.service.inter.RoomService;
 import com.hotel.util.Response;
 import com.hotel.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,14 +46,36 @@ public class RoomController {
                 rooms = service.showRoomByCategory(keyWord, page / rows + 1, rows);
                 break;
             default:
-                // keyWord的值：null、notNull
-                Integer status = keyWord.equals("null") ? 0 : 1;
+                // keyWord的值：null、notNull、noRent
+                Integer status;
+                if (keyWord.equals("null")) {
+                    status = 0;
+                } else if (keyWord.equals("notNull")) {
+                    status = 1;
+                } else {
+                    status = 2;
+                }
                 rooms = service.showRoomByStatus(status, page / rows + 1, rows);
                 break;
         }
         // 添加到返回对象中
         response.setSelfContent("rows", rooms.getRows());
         response.setSelfContent("total", rooms.getTotal());
+        return response.generateInstance();
+    }
+
+    @RequestMapping("/updateRoom")
+    @ResponseBody
+    private Map<String, Object> updateRoom(@RequestParam("roomID") Integer id) {
+        Response response = reUtil.newResponseInstance();
+        Room room = service.showRoomById(id);
+        if (room.getStatus() == 1) {
+            response.setResponseResult(Response.RESULT_ERROR);
+            return response.generateInstance();
+        }
+        room.setStatus(2);
+        response.setResponseResult(Response.RESULT_SUCCESS);
+        service.updateStatus(room);
         return response.generateInstance();
     }
 }

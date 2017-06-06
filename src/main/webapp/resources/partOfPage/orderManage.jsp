@@ -285,10 +285,10 @@
 				}
 			}
 		})
-		buttonOnOrOff();
+		// buttonOnOrOff();
 	}
 
-	// 添加供应商模态框数据校验
+	// 编辑供应商模态框数据校验
 	function bootstrapValidatorInit2() {
 		$("#order_form_add").bootstrapValidator({
 			message: 'This is not valid',

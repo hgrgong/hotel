@@ -59,11 +59,11 @@
             password = #{password},
             mobile = #{mobile},
             email = #{email},
-        where id = #{id}
+        where uid = #{id}
     </update>
 
     <delete id="deleteById">
-        delete from user where id = #{id}
+        delete from user where uid = #{id}
     </delete>
 
     <delete id="deleteByName">

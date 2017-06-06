@@ -78,6 +78,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> selectByUserId(Integer userId) {
+        List<Order> orders = mapper.selectByUserId(userId);
+        return orders;
+    }
+
+    @Override
     public void update(Order order) {
         mapper.update(order);
     }

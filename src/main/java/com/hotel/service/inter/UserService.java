@@ -17,4 +17,6 @@ public interface UserService {
     QueryItem selectUserByUserId(Integer page, Integer rows, Integer userId);
 
     List<User> selectUserById(Integer id);
+
+    void deleteUser(Integer id);
 }
