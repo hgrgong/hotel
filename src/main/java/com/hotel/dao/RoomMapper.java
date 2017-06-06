@@ -30,7 +30,7 @@ public interface RoomMapper {
     void update(Room room);
 
     // update all room's price
-    void updatePrice(Integer price, String category);
+    void updatePrice(int price, String category);
 
     // delete room by id
     void deleteById(Integer roomId);

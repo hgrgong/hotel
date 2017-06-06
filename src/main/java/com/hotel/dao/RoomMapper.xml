@@ -30,10 +30,10 @@
     </update>
 
     <update id="updatePrice">
-        update room set price = '#{price}' where category = '#{category}'
+        update room set price = #{0} where category = #{1}
     </update>
 
     <delete id="deleteById">
-        delete from room where rid = '#{roomId}'
+        delete from room where rid = #{roomId}
     </delete>
 </mapper>

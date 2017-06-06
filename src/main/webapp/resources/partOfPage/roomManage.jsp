@@ -4,6 +4,8 @@ pageEncoding="UTF-8"%>
 
 <script>
 	var search_type = "none";
+	var update_type = "none";
+	var add_type = "none";
 	var search_keyWord = "none";
 	var selectID;
 
@@ -11,8 +13,13 @@ pageEncoding="UTF-8"%>
 	    searchAction();
 		roomListInit();
 		bootstrapValidatorInit();
+		// buttonOff();
 		optionAction();
+		optionAction2();
+		optionAction3();
 		editRoomStatus();
+		updatePrice();
+		addRoom();
 	})
 
 	// 分页查询参数
@@ -188,7 +195,6 @@ pageEncoding="UTF-8"%>
 	// 行编辑操作
 	function rowEditOperation(row) {
 		$('#edit_modal').modal("show");
-
 		// 信息加载
         $('#room_form_edit').bootstrapValidator("resetForm", true);
         $('#roomID').val(row.roomId);
@@ -268,6 +274,137 @@ pageEncoding="UTF-8"%>
 			});
 	}
 
+	// 第二个下拉框选择动作
+	function optionAction2() {
+		$(".dropOption3").click(function() {
+			var type = $(this).text();
+			$("#price_input").val("");
+			if (type == "单人房") {
+				update_type = "single";
+				$("#price_input").removeAttr("readOnly");
+				// $("#update_button").removeAttr("disabled");
+			} else if (type == "双人房") {
+				update_type = "double";
+				$("#price_input").removeAttr("readOnly");
+				// $("#update_button").removeAttr("disabled");
+			} else {
+				update_type = "family";
+				$("#price_input").removeAttr("readOnly");
+				// $("#update_button").removeAttr("disabled");
+			}
+
+			$("#room_type").text(type);
+			$("#price_input").attr("placeholder", "更改" + type + "价格");
+		})
+	}
+	// 禁止按钮的提交
+	function buttonOff() {
+        var value = $("#price_input").val();
+        // alert(value);
+        if (value != "") {
+            $("#update_button").removeAttr("disabled");
+        }
+	}
+
+    // 发出更新房价请求
+	function updatePrice() {
+	    $("#update_button").click(function() {
+	        var data = {
+	            "roomType": update_type,
+	            "price": $("#price_input").val(),
+	        }
+	        alert(data.roomType + ": " + data.price);
+	        $.ajax({
+	            type: "POST",
+	            url: "room/updatePrice",
+	            dataType: "json",
+	            contentType: "application/json",
+                data: JSON.stringify(data),
+                success : function(response) {
+                    // 接收并处理后端返回的响应
+					if(response.result == "error"){
+						var errorMessage;
+						if(response.msg == "priceNoChange"){
+							errorMessage = "房价不变，更新个屁";
+						}else if(response.msg == "priceUnreasonable"){
+							errorMessage = "房价设置不合理";
+						}
+                        showMsg('error', errorMessage, '');
+					} else {
+						showMsg('success', '房价更新成功', '');
+					}
+                    tableRefresh();
+                },
+                error : function(xhr, textStatus, errorThrow) {
+                    // handler error
+                    handleAjaxError(xhr.status);
+                }
+	        })
+	    })
+	}
+
+    // 添加房间
+    function addRoom() {
+        $("#add_room").click(function() {
+            $('#add_modal').modal("show");
+        });
+
+		$('#add_modal_submit').click(
+            function() {
+                var data = {
+                    "roomType": add_type,
+                }
+
+                // ajax
+                $.ajax({
+                    type : "GET",
+                    url : "room/addRoom",
+                    dataType : "json",
+                    contentType : "application/json",
+                    data : data,
+                    success : function(response) {
+                        $('#add_modal').modal("hide");
+                        var msg;
+                        var type;
+                        var append = '';
+                        if (response.result == "success") {
+                            type = "success";
+                            msg = "房间添加成功";
+                        } else if (response.result == "error") {
+                            type = "error";
+                            msg = "房间添加失败";
+                        }
+                        showMsg(type, msg, append);
+                        // alert(msg);
+                        tableRefresh();
+                    },
+                    error : function(xhr, textStatus, errorThrow) {
+                        $('#add_modal').modal("hide");
+                        // handler error
+                        handleAjaxError(xhr.status);
+                    }
+                });
+		    });
+    }
+
+	// 第三个下拉框选择动作
+	function optionAction3() {
+		$(".dropOption4").click(function() {
+			var type = $(this).text();
+			if (type == "单人房") {
+				add_type = "single";
+				$("#add_modal_submit").removeAttr("disabled");
+			} else if (type == "双人房") {
+				add_type = "double";
+				$("#add_modal_submit").removeAttr("disabled");
+			} else {
+				add_type = "family";
+				$("#add_modal_submit").removeAttr("disabled");
+			}
+			$("#add_type").text(type);
+		})
+	}
+
 </script>
 
 <div class="panel panel-default">
@@ -317,8 +454,37 @@ pageEncoding="UTF-8"%>
         </div>
 
 		<div class="row" style="margin-top: 25px">
+			<div class="col-md-1 col-sm-2">
+				<div class="btn-group">
+					<button class="btn btn-default dropdown-toggle"
+						data-toggle="dropdown">
+						<span id="room_type">调整房价</span> <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="javascript:void(0)" class="dropOption3">单人房</a></li>
+						<li><a href="javascript:void(0)" class="dropOption3">双人房</a></li>
+						<li><a href="javascript:void(0)" class="dropOption3">家庭房</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-9 col-sm-9">
+				<div>
+					<div class="col-md-3 col-sm-4">
+						<input id="price_input" type="text" class="form-control"
+							placeholder="价格" readOnly="true" oninput="buttonOff()">
+					</div>
+					<div class="col-md-2 col-sm-2">
+						<button id="update_button" class="btn btn-success" disabled="disabled">
+							<span class="glyphicon glyphicon-refresh"></span> <span>更改</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin-top: 25px">
 			<div class="col-md-5">
-				<button class="btn btn-sm btn-default" id="add_goods">
+				<button class="btn btn-sm btn-default" id="add_room">
 					<span class="glyphicon glyphicon-plus"></span> <span>添加房间</span>
 				</button>
 			</div>
@@ -352,7 +518,7 @@ pageEncoding="UTF-8"%>
 						<form class="form-horizontal" role="form" id="room_form_edit"
 							style="margin-top: 25px">
                             <div class="form-group">
-								<label for="" class="control-label col-md-4 col-sm-4"> <span>房间编号：</span>
+								<label for="" class="control-label col-xs-6 col-md-4 col-sm-4"> <span>房间编号：</span>
 								</label>
 								<div class="col-md-8 col-sm-8">
 									<input type="text" class="form-control" id="roomID"
@@ -360,7 +526,7 @@ pageEncoding="UTF-8"%>
 								</div>
 							</div>
 							<div class="form-group">
-                                <label for="" class="control-label col-md-4 col-sm-4"> <span>房间状态：</span>
+                                <label for="" class="control-label col-xs-6 col-md-4 col-sm-4"> <span>房间状态：</span>
                                 </label>
                                 <div class="col-md-8 col-sm-8">
 									<input type="text" class="form-control" id="roomStatus"
@@ -378,6 +544,49 @@ pageEncoding="UTF-8"%>
 				</button>
 				<button class="btn btn-success" type="button" id="edit_modal_submit">
 					<span>确认更改</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 添加货物信息模态框 -->
+<div id="add_modal" class="modal fade" table-index="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true"
+	data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">添加房间，选择房间类型即可</h4>
+			</div>
+			<div class="modal-body">
+				<!-- 模态框的内容 -->
+				<div class="row">
+					<div class="col-xs-6 col-md-4"></div>
+                    <div class="col-xs-6 col-md-4">
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown">
+                                <span id="add_type">房间类型</span> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:void(0)" class="dropOption4">单人房</a></li>
+                                <li><a href="javascript:void(0)" class="dropOption4">双人房</a></li>
+                                <li><a href="javascript:void(0)" class="dropOption4">家庭房</a></li>
+                            </ul>
+                        </div>
+					</div>
+					<div class="col-xs-6 col-md-4"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" type="button" data-dismiss="modal">
+					<span>取消</span>
+				</button>
+				<button class="btn btn-success" type="button" id="add_modal_submit" disabled="disabled">
+					<span>提交</span>
 				</button>
 			</div>
 		</div>

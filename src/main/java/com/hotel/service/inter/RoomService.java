@@ -16,4 +16,10 @@ public interface RoomService {
     Room showRoomById(Integer roomId);
 
     void updateStatus(Room room);
+
+    Integer showPriceByCategory(String type);
+
+    void updatePriceByCategory(int price, String type);
+
+    void addRoom(Room room);
 }

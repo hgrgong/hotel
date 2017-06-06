@@ -81,4 +81,22 @@ public class RoomServiceImpl implements RoomService {
     public void updateStatus(Room room) {
         mapper.update(room);
     }
+
+    @Override
+    public Integer showPriceByCategory(String type) {
+        List<Room> rooms = mapper.selectByCategory(type);
+        return rooms.get(0).getPrice();
+    }
+
+    @Override
+    public void updatePriceByCategory(int price, String type) {
+        mapper.updatePrice(price, type);
+    }
+
+    @Override
+    public void addRoom(Room room) {
+        mapper.insert(room);
+    }
+
+
 }
