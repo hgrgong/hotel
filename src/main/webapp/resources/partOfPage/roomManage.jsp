@@ -313,7 +313,7 @@ pageEncoding="UTF-8"%>
 	            "roomType": update_type,
 	            "price": $("#price_input").val(),
 	        }
-	        alert(data.roomType + ": " + data.price);
+	        // alert(data.roomType + ": " + data.price);
 	        $.ajax({
 	            type: "POST",
 	            url: "room/updatePrice",

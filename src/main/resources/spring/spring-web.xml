@@ -28,5 +28,12 @@
         <property name="defaultEncoding" value="UTF-8"></property>
         <property name="maxUploadSize" value="52428800"></property>
     </bean>
-
+    
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/resources/partOfPage/**"/>
+            <mvc:mapping path="/main/**"/>
+            <bean class="com.hotel.interceptor.FirstInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>
